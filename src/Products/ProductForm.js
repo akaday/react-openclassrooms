@@ -1,6 +1,23 @@
 import React from "react";
 
+const RESET_VALUES = {id: '', category: '', price: '', stocked: false, name: ''};
+
 class ProductForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSave = this.handleSave.bind(this);
+  }
+
+  handleSave(e) {
+    this.props.onSave(this.state.product);
+    // reset the form values to blank after submitting:
+    this.setState({
+      product: Object.assign({}, RESET_VALUES)
+    });
+    // prevent the form submit event from triggering an HTTP Post:
+    e.preventDefault();
+  }
+
   render() {
     return (
       <form>
@@ -32,7 +49,7 @@ class ProductForm extends React.Component {
             &nbsp;In stock?
           </label>
         </p>
-        <input type="submit" value="Save" />
+        <input type="submit" value="Save" onClick={this.handleSave} />
       </form>
     );
   }

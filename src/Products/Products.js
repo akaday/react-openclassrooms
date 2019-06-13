@@ -49,12 +49,54 @@ let PRODUCTS = {
 };
 
 class Products extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: "",
+      inStockOnly: false,
+      products: PRODUCTS
+    };
+
+    this.handleFilter = this.handleFilter.bind(this);
+    this.saveProduct = this.saveProduct.bind(this);
+    this.handleDestroy = this.handleDestroy.bind(this);
+  }
+
+  handleFilter(filterInput) {
+    this.setState(filterInput);
+  }
+
+  saveProduct(product) {
+    product.id = new Date().getTime();
+    this.setState(prevState => {
+      let products = prevState.products;
+      products[product.id] = product;
+      return { products };
+    });
+  }
+
+  handleDestroy(productId) {
+    this.setState((prevState) => {
+      let products = prevState.products;
+      delete products[productId];
+      return { products };
+    });
+  }
+
   render() {
     return (
       <div>
-        <Filters> </Filters>
-        <ProductTable products={PRODUCTS}> </ProductTable>
-        <ProductForm> </ProductForm>
+        <Filters
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+          onFilter={this.handleFilter}
+        />
+        <ProductTable
+          products={this.state.products}
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />
+        <ProductForm onSave={this.saveProduct} />
       </div>
     );
   }
