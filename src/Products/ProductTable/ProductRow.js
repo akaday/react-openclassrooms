@@ -1,37 +1,26 @@
 import React from "react";
 
 class ProductRow extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.handleSort = this.handleSort.bind(this);
+    this.destroy = this.destroy.bind(this);
   }
-
   destroy() {
     this.props.onDestroy(this.props.product.id);
   }
   render() {
+    var name = this.props.product.stocked ? (
+      this.props.product.name
+    ) : (
+      <span style={{ color: "red" }}>{this.props.product.name}</span>
+    );
     return (
       <tr>
+        <td>{name}</td>
+        <td>{this.props.product.price}</td>
         <td>
-          <span
-            className={
-              this.props.product.stocked ? "" : "ProductRow-out-of-stock"
-            }
-          >
-            {this.props.product.name}{" "}
-          </span>{" "}
-        </td>{" "}
-        <td> {this.props.product.price} </td>{" "}
-        <td>
-          <button
-            onClick={this.destroy}
-            style={{
-              color: "red"
-            }}
-          >
-            x{" "}
-          </button>{" "}
-        </td>{" "}
+          <button onClick={this.destroy}>x</button>
+        </td>
       </tr>
     );
   }

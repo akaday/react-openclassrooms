@@ -16,7 +16,7 @@ let PRODUCTS = {
     category: "Musical Instruments",
     price: "$5,000",
     stocked: true,
-    name: "Cello"
+    name: "Harpsicord"
   },
   "3": {
     id: 3,
@@ -67,16 +67,18 @@ class Products extends React.Component {
   }
 
   saveProduct(product) {
-    product.id = new Date().getTime();
+    if (!product.id) {
+      product.id = new Date().getTime();
+    }
     this.setState(prevState => {
       let products = prevState.products;
       products[product.id] = product;
       return { products };
     });
   }
-
+  
   handleDestroy(productId) {
-    this.setState((prevState) => {
+    this.setState(prevState => {
       let products = prevState.products;
       delete products[productId];
       return { products };
@@ -95,6 +97,7 @@ class Products extends React.Component {
           products={this.state.products}
           filterText={this.state.filterText}
           inStockOnly={this.state.inStockOnly}
+          onDestroy={this.handleDestroy}
         />
         <ProductForm onSave={this.saveProduct} />
       </div>

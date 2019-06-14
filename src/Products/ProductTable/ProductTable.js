@@ -6,6 +6,8 @@ class ProductTable extends React.Component {
   constructor(props) {
     super(props);
     this.sortByKeyAndOrder = this.sortByKeyAndOrder.bind(this);
+    this.handleSort = this.handleSort.bind(this);
+    this.handleDestroy = this.handleDestroy.bind(this);
     this.state = {
       sort: {
         column: "name",
@@ -41,6 +43,19 @@ class ProductTable extends React.Component {
     return productsAsArray.sort(this.sortByKeyAndOrder);
   }
 
+  handleDestroy(id) {
+    this.props.onDestroy(id);
+  }
+
+  handleSort(column, direction) {
+    this.setState({
+      sort: {
+        column: column,
+        direction: direction
+      }
+    });
+  }
+
   render() {
     var rows = [];
     this.sortProducts().forEach(product => {
@@ -50,6 +65,7 @@ class ProductTable extends React.Component {
       ) {
         return;
       }
+      
       rows.push(
         <ProductRow
           product={product}

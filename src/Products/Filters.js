@@ -8,65 +8,32 @@ class Filters extends React.Component {
   }
 
   handleChange(e) {
-    const target = e.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
+    const value = e.target[e.target.type === "checkbox" ? "checked" : "value"];
+    const name = e.target.name;
 
-    this.setState(prevState => {
-      prevState.product[name] = value;
-      return { product: prevState.product };
+    this.props.onFilter({
+      [name]: value
     });
   }
 
   render() {
     return (
       <form>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={this.props.filterText}
+          name="filterText"
+          onChange={this.handleChange}
+        />
         <p>
-          <label>
-            Name
-            <br />
-            <input
-              type="text"
-              name="name"
-              onChange={this.handleChange}
-              value={this.state.product.name}
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            Category
-            <br />
-            <input
-              type="text"
-              name="category"
-              onChange={this.handleChange}
-              value={this.state.product.category}
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            Price
-            <br />
-            <input
-              type="text"
-              name="price"
-              onChange={this.handleChange}
-              value={this.state.product.price}
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            <input
-              type="checkbox"
-              name="stocked"
-              onChange={this.handleChange}
-              checked={this.state.product.stocked}
-            />
-            &nbsp;In stock?
-          </label>
+          <input
+            type="checkbox"
+            checked={this.props.inStockOnly}
+            name="inStockOnly"
+            onChange={this.handleChange}
+          />
+          &nbsp; Only show products in stock
         </p>
       </form>
     );
