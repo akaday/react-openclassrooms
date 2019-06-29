@@ -3,10 +3,18 @@ import React from "react";
 class ProductRow extends React.Component {
   constructor(props) {
     super(props);
+    this.edit = this.edit.bind(this);
     this.destroy = this.destroy.bind(this);
+    this.thousandFormat = this.thousandFormat.bind(this);
+  }
+  edit() {
+    this.props.onEdit(this.props.product);
   }
   destroy() {
     this.props.onDestroy(this.props.product.id);
+  }
+  thousandFormat(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   }
   render() {
     var name = this.props.product.stocked ? (
@@ -17,9 +25,11 @@ class ProductRow extends React.Component {
     return (
       <tr>
         <td>{name}</td>
-        <td>{this.props.product.price}</td>
+        <td>${this.thousandFormat(this.props.product.price)}</td>
         <td>
-          <button onClick={this.destroy}>x</button>
+        {this.props.editing}
+          <button disabled={this.props.editing} onClick={this.edit}>edit</button>
+          <button disabled={this.props.editing} onClick={this.destroy}>x</button>
         </td>
       </tr>
     );

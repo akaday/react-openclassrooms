@@ -7,6 +7,7 @@ class ProductTable extends React.Component {
     super(props);
     this.sortByKeyAndOrder = this.sortByKeyAndOrder.bind(this);
     this.handleSort = this.handleSort.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
     this.handleDestroy = this.handleDestroy.bind(this);
     this.state = {
       sort: {
@@ -24,7 +25,7 @@ class ProductTable extends React.Component {
     ];
     if (this.state.sort.column === "price") {
       [a, b] = [a, b].map(value =>
-        parseFloat(value.replace(/[^\d\.]/g, ""), 10)
+        parseFloat(value.replace(/[^\d.]/g, ""), 10)
       );
     }
     if (a > b) {
@@ -41,6 +42,10 @@ class ProductTable extends React.Component {
       pid => this.props.products[pid]
     );
     return productsAsArray.sort(this.sortByKeyAndOrder);
+  }
+
+  handleEdit(product) {
+    this.props.onEdit(product);
   }
 
   handleDestroy(id) {
@@ -65,11 +70,13 @@ class ProductTable extends React.Component {
       ) {
         return;
       }
-      
+
       rows.push(
         <ProductRow
           product={product}
           key={product.id}
+          onEdit={this.handleEdit}
+          editing={this.props.editing}
           onDestroy={this.handleDestroy}
         />
       );
